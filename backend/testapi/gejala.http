@@ -1,8 +1,17 @@
 @url = http://localhost:5000/api/gejala
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AbWFsYXJpYWFwcC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpc19hY3RpdmUiOnRydWUsImlhdCI6MTc2OTYxNzIwNiwiZXhwIjoxNzY5NzAzNjA2fQ.3nL-eEzS2m4oXA6NZdeXhKvcS-GJ7URQ-F99u5jLeXI
 
 GET {{url}} HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+###
+
+GET {{url}}/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
 
 ###
 
@@ -11,10 +20,10 @@ POST {{url}} HTTP/1.1
 Content-Type: application/json
 
 {
-    "kode": "GJ001",
-    "nama": "Demam Tinggi",
+    "kode": "GJ002",
+    "nama": "Mulut Pahit",
     "is_active": true
 }
 
 
-#####
+##### 
