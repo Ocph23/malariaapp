@@ -1,0 +1,59 @@
+@url = http://localhost:5000
+
+
+GET {{url}}/login HTTP/1.1
+Content-Type: application/json
+
+# {
+#     "username": "testuser",
+#     "password": "password"
+# }
+###
+
+
+GET {{url}}/api/gejala HTTP/1.1
+Content-Type: application/json
+
+# {
+#     "username": "testuser",
+#     "password": "password"
+# }
+###
+
+
+GET {{url}}/protected HTTP/1.1
+Content-Type: application/json
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoib2NwaDIzIn0.L--cx-w4LNzz7OMj9xg1POhc07Z0FlYXNgTft7lJACc
+
+
+GET {{url}}/books HTTP/1.1
+###
+GET {{url}}/books/3 HTTP/1.1
+
+###
+POST {{url}}/books HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "New Book",
+    "author": "Author Name",
+    "published_year": 2024
+}
+
+###
+
+PUT {{url}}/books/1 HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Change Book",
+    "author": "Change Author Name",
+    "published_year": 2025
+}
+
+###
+
+###
+DELETE {{url}}/books/2 HTTP/1.1
+
+##
