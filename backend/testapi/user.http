@@ -1,4 +1,4 @@
-@url = http://localhost:5000/api/gejala
+@url = http://localhost:5000/api/user
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AbWFsYXJpYWFwcC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpc19hY3RpdmUiOnRydWUsImlhdCI6MTc2OTYxNzIwNiwiZXhwIjoxNzY5NzAzNjA2fQ.3nL-eEzS2m4oXA6NZdeXhKvcS-GJ7URQ-F99u5jLeXI
 
 GET {{url}} HTTP/1.1

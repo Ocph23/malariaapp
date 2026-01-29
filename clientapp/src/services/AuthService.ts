@@ -2,22 +2,17 @@ import axios from 'axios';
 import { useAuthStore } from '@/stores/auth';
 import type { HeaderRequest, LoginRequest } from '@/models/request';
 import type { User } from '@/models';
-import HelperService from './HelperService';
-import { MockAuthService } from './mocks/MockAuthService';
 
 const AuthService = {
   login: async (loginRequest: LoginRequest): Promise<User> => {
     try {
-      const url = "/api/login";
-      if (HelperService.isUseMockMode()) {
-        await MockAuthService.login(url, loginRequest);
-      }
+      const url = "/auth/login";
       const result = await axios.post(url, loginRequest);
       if (result) {
         const auth = useAuthStore();
         await auth.setAuthResponse(result.data);
       }
-      return result as unknown as User;
+      return result.data as unknown as User;
     } catch (err: unknown | Error) {
       return Promise.reject(err);
     }

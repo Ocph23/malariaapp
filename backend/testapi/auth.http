@@ -1,12 +1,33 @@
 @url = http://localhost:5000/api/auth
-
+@token =Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwidXNlcm5hbWUiOiJidWRpIiwiZW1haWwiOiJidWRpQG1hbGFyaWEuYXBwIiwicm9sZSI6InBhc2llbiIsImlzX2FjdGl2ZSI6dHJ1ZSwiaWF0IjoxNzY5NjU5OTQ4LCJleHAiOjE3Njk3NDYzNDh9.6j9M67bumA1yenXKcLdEnjf3i8zXKVCm0Fi3DmhYtNY
 
 POST {{url}}/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "admin",
+    "username": "budi",
     "password": "Password@123"
+}
+
+####
+
+GET {{url}}/pasien HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+#####
+POST {{url}}/register HTTP/1.1
+Content-Type: application/json
+
+{
+    "nama": "Budi",
+    "jenis_kelamin": "Laki-laki",
+    "tanggal_lahir": "1990-01-01",
+    "alamat": "Jakarta",
+    "nomor_telepon": "081234567890",
+    "username": "budi",
+    "password": "Password@123",
+    "email": "budi@malaria.app"
 }
 
 

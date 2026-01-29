@@ -3,6 +3,7 @@ from functools import wraps
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 import jwt
 import os
 
@@ -15,6 +16,7 @@ migrate = Migrate()
 def create_app():
     print("Initializing core package")
     app = Flask(__name__)
+    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     app.config.from_object(os.getenv("FLASK_CONFIG") or "config.DevelopmentConfig")
     init_app(app)
     register_blueprints(app)
@@ -32,9 +34,17 @@ def init_app(app):
 def register_blueprints(app: Flask):
     from .blueprints import gejala_api
     from .blueprints import auth_api
+    from .blueprints import penyakit_api
+    from .blueprints import aturan_api
+    from .blueprints import diagnosa_api
+    from .blueprints import user_api
 
     app.register_blueprint(auth_api, url_prefix="/api/auth")
     app.register_blueprint(gejala_api, url_prefix="/api/gejala")
+    app.register_blueprint(penyakit_api, url_prefix="/api/penyakit")
+    app.register_blueprint(aturan_api, url_prefix="/api/aturan")
+    app.register_blueprint(diagnosa_api, url_prefix="/api/diagnosa")
+    app.register_blueprint(user_api, url_prefix="/api/user")
 
 
 def auth_required(f):

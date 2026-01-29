@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+
 import LoginPage from '@/views/Auth/LoginPage.vue'
 import RegisterPage from '@/views/Auth/RegisterPage.vue'
 import { useAuthStore } from '@/stores/auth'
 import LaporanPage from '@/views/admin/LaporanPage.vue'
+import UserPage from '@/views/admin/UserPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,10 +25,41 @@ const router = createRouter({
           component: HomeView,
         },
         {
+          path: 'user',
+          name: 'admin.user',
+          component: UserPage,
+        },
+        {
           path: 'laporan',
           name: 'admin.laporan',
           component: LaporanPage,
-        }
+        },
+      ]
+    },
+    {
+      path: '/pakar',
+      name: 'pakar',
+      children: [
+        {
+          path: '',
+          name: 'pakar.home',
+          component: () => import('../views/pakar/HomeView.vue'),
+        },
+        {
+          path: 'gejala',
+          name: 'pakar.gejala',
+          component: () => import('../views/pakar/GejalaPage.vue'),
+        },
+        {
+          path: 'penyakit',
+          name: 'pakar.penyakit',
+          component: () => import('../views/pakar/PenyakitPage.vue'),
+        },
+        {
+          path: 'penyakit/:id',
+          name: 'pakar.penyakit.aturan',
+          component: () => import('../views/pakar/AturanPenyakitPage.vue'),
+        },
       ]
     },
     {

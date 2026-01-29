@@ -43,7 +43,7 @@
             <div>
               <label for="email" class="block text-sm mb-2 dark:text-white">Email address</label>
               <div class="relative">
-                <input type="email" id="email" name="email"
+                <input type="email" id="email" name="email" v-model="user.username"
                   class="py-2.5 sm:py-3 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                   required aria-describedby="email-error">
                 <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
@@ -67,7 +67,7 @@
                   href="../examples/html/recover-account.html">Forgot password?</a>
               </div>
               <div class="relative">
-                <input type="password" id="password" name="password"
+                <input type="password" id="password" name="password" v-model="user.password"
                   class="py-2.5 sm:py-3 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                   required aria-describedby="password-error">
                 <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
@@ -113,18 +113,22 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-const handleSubmit = async () => {
-  const result = await AuthService.login({
-    username: '',
-    password: ''
-  });
 
+const user = {
+  username: '',
+  password: ''
+};
+
+
+const handleSubmit = async () => {
+  const result = await AuthService.login(user);
 
   if (result.role === 'admin') {
     router.push({ name: 'home' });
   }
-  else {
-    router.push({ name: 'home' });
+
+  if (result.role === 'pakar') {
+    router.push({ name: 'pakar.home' });
   }
 
 };

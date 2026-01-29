@@ -273,27 +273,7 @@ const user = userStore.getUser();
 
 const menus = ref([
   { name: 'Home', routeName: 'admin.home' },
-  {
-    name: 'Users',
-    routeName: '',
-    children: [
-      {
-        name: 'Sub Menu 1',
-        routeName: '',
-        children: [
-          { name: 'Link 1', routeName: 'admin.users.link1' },
-          { name: 'Link 2', routeName: 'admin.users.link2' },
-        ]
-      },
-      {
-        name: 'Sub Menu 2',
-        routeName: '',
-        children: [
-          { name: 'Link 1', routeName: 'admin.users.link4' },
-        ]
-      },
-    ]
-  },
+  { name: 'Users', routeName: 'admin.user' },
   { name: 'Laporan', routeName: 'admin.laporan' },
 ]);
 

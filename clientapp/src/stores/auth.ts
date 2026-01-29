@@ -32,11 +32,11 @@ export const useAuthStore = defineStore('user', {
       }
       return this.user;
     },
-    setAuthResponse(authResponse: { access_token: string, user: User }): Promise<void> {
+    setAuthResponse(authResponse: { token: string, role: string, user: User }): Promise<void> {
 
-      localStorage.setItem('token', authResponse.access_token);
+      localStorage.setItem('token', authResponse.token);
       localStorage.setItem('user', JSON.stringify(authResponse.user));
-      this.token = authResponse.access_token;
+      this.token = authResponse.token;
       this.user = authResponse.user;
       return Promise.resolve();
     },
