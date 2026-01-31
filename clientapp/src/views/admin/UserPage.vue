@@ -42,8 +42,13 @@
                     {{ item.is_active }}</td>
 
                   <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                    <button type="button" @click="confirmDelete(item.id)"
-                      class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-hidden focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Delete</button>
+                    <!-- <button type="button" @click="edit(item)">
+                      <PencilSquareIcon class="size-5 hover:size-6 cursor-pointer text-amber-600"></PencilSquareIcon>
+                    </button> -->
+                    <button type="button" @click="confirmDelete(item.id)">
+                      <XCircleIcon class="size-5 hover:size-6 cursor-pointer text-red-600"></XCircleIcon>
+                    </button>
+
                   </td>
                 </tr>
 
@@ -153,7 +158,7 @@ import { useLoading } from '@/plugins/loading';
 import UserService from '@/services/UserService';
 import { reactive, ref } from 'vue';
 import type { User } from '@/models';
-import { PlusSmallIcon } from '@heroicons/vue/24/outline';
+import { PlusSmallIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 const loadingService = useLoading();
 const toast = useToast();
 

@@ -3,6 +3,7 @@
     <div class="flex flex-col">
       <div class="-m-1.5 overflow-x-auto">
         <div class="p-1.5 min-w-full inline-block align-middle">
+          <PageTitle title="Data Penyakit"></PageTitle>
           <div class="flex justify-end pb-5">
             <PlusSmallIcon @click="addModal" class="size-8 bg-teal-500 rounded-full p-1 text-white"></PlusSmallIcon>
           </div>
@@ -40,6 +41,9 @@
                   <td class="px-6 py-4  text-sm text-gray-800 dark:text-neutral-200">
                     {{ item.solusi }}</td>
                   <td class=" px-6 py-4  font-medium flex justify-end gap-2">
+                    <button type="button" @click="detail(item)">
+                      <ListBulletIcon class="size-5 hover:size-6 cursor-pointer text-blue-600"></ListBulletIcon>
+                    </button>
                     <button type="button" @click="edit(item)">
                       <PencilSquareIcon class="size-5 hover:size-6 cursor-pointer text-amber-600"></PencilSquareIcon>
                     </button>
@@ -158,17 +162,18 @@ import { useLoading } from '@/plugins/loading';
 import PenyakitService from '@/services/PenyakitService';
 import { reactive, ref } from 'vue';
 import type { Penyakit } from '@/models';
-import { PencilSquareIcon, PlusSmallIcon, XCircleIcon } from '@heroicons/vue/24/outline';
-const loadingService = useLoading();
-const toast = useToast();
-
-
+import { ListBulletIcon, PencilSquareIcon, PlusSmallIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import { HSOverlay } from "preline"
 import z from 'zod';
 import HelperService from '@/services/HelperService';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import PakarLayout from '@/components/layouts/PakarLayout.vue';
+import { useRouter } from 'vue-router';
+import PageTitle from '@/components/PageTitle.vue';
 
+const loadingService = useLoading();
+const toast = useToast();
+const router = useRouter();
 
 const addModal = () => {
   penyakit.id = 0;
@@ -217,6 +222,11 @@ const load = () => {
 }
 
 const errors = ref<Record<string, string>>({})
+
+
+const detail = (oldPenyakit: Penyakit) => {
+  router.push('/pakar/penyakit/' + oldPenyakit.id)
+}
 
 
 const edit = (oldPenyakit: Penyakit) => {

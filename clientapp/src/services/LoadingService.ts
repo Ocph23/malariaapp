@@ -122,7 +122,7 @@ export class LoadingService {
             ` : ''}
           </div>
           ${config.showCancel ? `
-            <button 
+            <button
               id="${id}-cancel"
               class="mt-2 px-4 py-1 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded"
             >
@@ -199,7 +199,9 @@ export class LoadingService {
 
   public hideAll(): void {
     this.instances.forEach(instance => {
-      this.hide(instance.id)
+      setTimeout(() => {
+        this.hide(instance.id)
+      }, 500);
     })
   }
 

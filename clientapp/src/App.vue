@@ -36,12 +36,11 @@ axios.interceptors.response.use(function (response) {
       return
     }
     if (axiosResponse.status == 404) {
-      toastService.error(response.message, "Error")
+      toastService.error(response.error as string, "Error")
       return
     }
-    if (axiosResponse.status == 503) {
-      toastService.error(response.message, "Error")
-      router.push(`/error-page/${axiosResponse.status}`)
+    if (axiosResponse.status == 503 || axiosResponse.status == 500) {
+      toastService.error(axiosResponse.statusText, "Error")
     }
 
     if (response.message)

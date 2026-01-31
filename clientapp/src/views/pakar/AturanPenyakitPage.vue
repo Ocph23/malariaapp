@@ -2,27 +2,28 @@
   <PakarLayout>
     <div class="flex flex-col">
       <div class="-m-1.5 overflow-x-auto">
+        <PageTitle title="Detail Penyakit" class="mb-10 ml-2"></PageTitle>
         <div class="p-1.5 min-w-full inline-block align-middle">
           <div class="p-4 mb-5 bg-white border border-gray-200 rounded-sm shadow-xl">
-            <div class="w-full border-b border-gray-200 dark:border-neutral-700 flex flex-row">
+            <div class="w-full mt-2 border-b border-gray-200 dark:border-neutral-700 flex flex-row">
               <label class="w-36">Kode </label>
               <label>: {{ data.penyakit.kode }}</label>
             </div>
-            <div class="w-full border-b border-gray-200 dark:border-neutral-700 flex flex-row">
+            <div class="w-full mt-2 border-b border-gray-200 dark:border-neutral-700 flex flex-row">
               <label class="w-36">Nama Penyakit </label>
               <label>: {{ data.penyakit.nama }}</label>
             </div>
-            <div class="w-full border-b border-gray-200 dark:border-neutral-700 flex flex-row">
+            <div class="w-full mt-2 border-b border-gray-200 dark:border-neutral-700 flex flex-row">
               <label class="w-36">Kode </label>
               <label>: {{ data.penyakit.bobot }}</label>
             </div>
-            <div class="w-full border-b border-gray-200 dark:border-neutral-700 flex flex-row">
+            <div class="w-full mt-2 border-b border-gray-200 dark:border-neutral-700 flex flex-row">
               <label class="w-36">Solusi </label>
               <label>: {{ data.penyakit.solusi }}</label>
             </div>
           </div>
 
-
+          <PageTitle title="Data Aturan/Gejala Penyakit" class="mt-10 ml-2"></PageTitle>
           <div class="flex justify-end pb-5">
             <PlusSmallIcon @click="addModal" class="size-8 bg-teal-500 rounded-full p-1 text-white"></PlusSmallIcon>
           </div>
@@ -175,6 +176,7 @@ import HelperService from '@/services/HelperService';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import PakarLayout from '@/components/layouts/PakarLayout.vue';
 import { useRoute } from 'vue-router';
+import PageTitle from '@/components/PageTitle.vue';
 
 
 const loadingService = useLoading();

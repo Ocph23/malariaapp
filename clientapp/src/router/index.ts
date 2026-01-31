@@ -16,6 +16,13 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/pasien',
+      name: 'home',
+      component: () => import('../views/pasien/HomePage.vue'),
+    },
+
+
+    {
       path: '/admin',
       name: 'admin',
       children: [
@@ -92,12 +99,26 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   // redirect to login page if not logged in and trying to access a restricted page
+
+
+
+
   const publicPages = ['/auth/login', '/auth/register', '/about'];
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthStore();
   const token = auth.getToken();
   if (authRequired && !token) {
     return '/auth/login';
+  }
+  if (to.path === '/') {
+    const user = auth.getUser()
+    if (user && user.role === 'admin') {
+      return '/admin'
+    }
+    if (user && user.role === 'pakar') {
+      return '/pakar'
+    }
+    return '/pasien'
   }
 });
 

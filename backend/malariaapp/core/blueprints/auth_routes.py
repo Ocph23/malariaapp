@@ -31,7 +31,6 @@ def login():
             "email": user.email,
             "role": user.role,
         },
-        "role": user.role,
     }, 200
 
 
@@ -62,7 +61,14 @@ def register():
         db.session.commit()
 
         token = Helper.generate_token(user)
-        return {"token": token, "username": user.username, "role": user.role}, 200
+        return {
+            "token": token,
+            "user": {
+                "username": user.username,
+                "email": user.email,
+                "role": user.role,
+            },
+        }, 200
     except Exception as e:
         db.session.rollback()
         return {"error": str(e)}, 500

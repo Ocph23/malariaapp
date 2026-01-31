@@ -1,16 +1,12 @@
 import type { User } from '@/models'
+import type { AuthResponse } from '@/models/response'
 import { defineStore, acceptHMRUpdate } from 'pinia'
 
 
 
-interface ToolStore {
-  token: string | null
-  user: User
-}
-
 export const useAuthStore = defineStore('user', {
   state: () => {
-    return {} as ToolStore
+    return {} as AuthResponse
   },
 
   actions: {
@@ -32,9 +28,9 @@ export const useAuthStore = defineStore('user', {
       }
       return this.user;
     },
-    setAuthResponse(authResponse: { token: string, role: string, user: User }): Promise<void> {
+    setAuthResponse(authResponse: AuthResponse): Promise<void> {
 
-      localStorage.setItem('token', authResponse.token);
+      localStorage.setItem('token', authResponse.token || '');
       localStorage.setItem('user', JSON.stringify(authResponse.user));
       this.token = authResponse.token;
       this.user = authResponse.user;

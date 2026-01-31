@@ -3,6 +3,7 @@
     <div class="flex flex-col">
       <div class="-m-1.5 overflow-x-auto">
         <div class="p-1.5 min-w-full inline-block align-middle">
+          <PageTitle title="data Gejala"></PageTitle>
           <div class="flex justify-end pb-5">
             <PlusSmallIcon @click="addModal" class="size-8 bg-teal-500 rounded-full p-1 text-white"></PlusSmallIcon>
           </div>
@@ -154,6 +155,7 @@ import z from 'zod';
 import HelperService from '@/services/HelperService';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import PakarLayout from '@/components/layouts/PakarLayout.vue';
+import PageTitle from '@/components/PageTitle.vue';
 
 
 const addModal = () => {

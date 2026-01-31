@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { useAuthStore } from '@/stores/auth';
-import type { HeaderRequest, LoginRequest } from '@/models/request';
+import type { HeaderRequest, LoginRequest, RegisterRequest } from '@/models/request';
 import type { User } from '@/models';
+import type { AuthResponse } from '@/models/response';
 
 const AuthService = {
   login: async (loginRequest: LoginRequest): Promise<User> => {
@@ -11,10 +12,27 @@ const AuthService = {
       if (result) {
         const auth = useAuthStore();
         await auth.setAuthResponse(result.data);
+        return result.data as unknown as User;
       }
-      return result.data as unknown as User;
+      throw new Error('Anda tidak memiliki akses')
     } catch (err: unknown | Error) {
-      return Promise.reject(err);
+      const error = err as Error;
+      return Promise.reject(error.message || err);
+    }
+  },
+  register: async (registerRequest: RegisterRequest): Promise<AuthResponse> => {
+    try {
+      const url = "/auth/register";
+      const result = await axios.post(url, registerRequest);
+      if (result) {
+        const auth = useAuthStore();
+        await auth.setAuthResponse(result.data);
+        return result.data as AuthResponse;
+      }
+      throw new Error('Anda tidak memiliki akses')
+    } catch (err: unknown | Error) {
+      const error = err as Error;
+      return Promise.reject(error.message || err);
     }
   },
   getHeader: (): HeaderRequest => {
