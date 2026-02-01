@@ -1,73 +1,63 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from 'vue-router'
 
-import 'preline';
-import axios, { AxiosError, type AxiosResponse } from 'axios';
-import { useAuthStore } from './stores/auth';
-import type { ResponseRequest } from './models/request';
-import { toastService } from './services/ToastService';
-import AuthService from './services/AuthService';
-
+import 'preline'
+import axios, { AxiosError, type AxiosResponse } from 'axios'
+import { useAuthStore } from './stores/auth'
+import type { ResponseRequest } from './models/request'
+import { toastService } from './services/ToastService'
+import AuthService from './services/AuthService'
 
 const router = useRouter()
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
-const auth = useAuthStore();
-const token = auth.getToken();
+axios.defaults.baseURL = import.meta.env.VITE_API_URL
+const auth = useAuthStore()
+const token = auth.getToken()
 if (auth && token) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
 
-axios.interceptors.response.use(function (response) {
-  // Optional: Do something with response data
-  return response
-}, function (err) {
-  try {
-    const axiosError = err as AxiosError;
-    const axiosResponse = axiosError.response as AxiosResponse;
-    const response: ResponseRequest = err.response.data as ResponseRequest;
-    let errorMessage;
-    if (axiosResponse.status == 401) {
-      toastService.error(response.message, "Error")
-      setTimeout(() => {
-        AuthService.logout()
-        router.push('/login')
-      }, 2000)
-      return
+axios.interceptors.response.use(
+  function (response) {
+    // Optional: Do something with response data
+    return response
+  },
+  function (err) {
+    try {
+      const axiosError = err as AxiosError
+      const axiosResponse = axiosError.response as AxiosResponse
+      const response: ResponseRequest = err.response.data as ResponseRequest
+      let errorMessage
+      if (axiosResponse.status == 401) {
+        toastService.error(response.message, 'Error')
+        setTimeout(() => {
+          AuthService.logout()
+          router.push('/login')
+        }, 2000)
+        return
+      }
+      if (axiosError.status == 404) {
+        toastService.error(response.error as string, 'Error')
+        return
+      }
+      if (axiosError.status == 409) {
+        toastService.error(response.error as string, 'Error')
+        return
+      }
+      if (axiosError.status == 503 || axiosError.status == 500) {
+        toastService.error(axiosResponse.statusText, 'Error')
+      }
+
+      if (response.message) errorMessage = response.message
+
+      throw new Error(errorMessage)
+    } catch (error: unknown) {
+      const err = error as Error
+      toastService.error(err.message, 'Error')
     }
-    if (axiosResponse.status == 404) {
-      toastService.error(response.error as string, "Error")
-      return
-    }
-    if (axiosResponse.status == 503 || axiosResponse.status == 500) {
-      toastService.error(axiosResponse.statusText, "Error")
-    }
-
-    if (response.message)
-      errorMessage = response.message
-
-    throw new Error(errorMessage)
-  } catch (error: unknown) {
-    const err = error as Error;
-    toastService.error(err.message, "Error")
-  }
-  return Promise.reject(err)
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return Promise.reject(err)
+  },
+)
 </script>
 
 <template>

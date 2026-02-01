@@ -17,10 +17,25 @@ const router = createRouter({
     },
     {
       path: '/pasien',
-      name: 'home',
-      component: () => import('../views/pasien/HomePage.vue'),
+      name: 'pasien',
+      children: [
+        {
+          path: '',
+          name: 'pasien.home',
+          component: () => import('../views/pasien/HomePage.vue'),
+        },
+        {
+          path: 'diagnosa',
+          name: 'pasien.diagnosa',
+          component: () => import('../views/pasien/DiagnosaPage.vue'),
+        },
+        {
+          path: 'riwayat',
+          name: 'pasien.riwayat',
+          component: () => import('../views/pasien/DiagnosaPage.vue'),
+        },
+      ],
     },
-
 
     {
       path: '/admin',
@@ -41,7 +56,7 @@ const router = createRouter({
           name: 'admin.laporan',
           component: LaporanPage,
         },
-      ]
+      ],
     },
     {
       path: '/pakar',
@@ -67,7 +82,7 @@ const router = createRouter({
           name: 'pakar.penyakit.aturan',
           component: () => import('../views/pakar/AturanPenyakitPage.vue'),
         },
-      ]
+      ],
     },
     {
       path: '/auth',
@@ -83,7 +98,6 @@ const router = createRouter({
           name: 'register',
           component: RegisterPage,
         },
-
       ],
     },
     {
@@ -100,15 +114,12 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   // redirect to login page if not logged in and trying to access a restricted page
 
-
-
-
-  const publicPages = ['/auth/login', '/auth/register', '/about'];
-  const authRequired = !publicPages.includes(to.path);
-  const auth = useAuthStore();
-  const token = auth.getToken();
+  const publicPages = ['/auth/login', '/auth/register', '/about']
+  const authRequired = !publicPages.includes(to.path)
+  const auth = useAuthStore()
+  const token = auth.getToken()
   if (authRequired && !token) {
-    return '/auth/login';
+    return '/auth/login'
   }
   if (to.path === '/') {
     const user = auth.getUser()
@@ -120,12 +131,10 @@ router.beforeEach(async (to) => {
     }
     return '/pasien'
   }
-});
-
+})
 
 router.afterEach(async (to, from, failure) => {
-  if (!failure) setTimeout(() => window.HSStaticMethods.autoInit(), 100);
-});
-
+  if (!failure) setTimeout(() => window.HSStaticMethods.autoInit(), 100)
+})
 
 export default router

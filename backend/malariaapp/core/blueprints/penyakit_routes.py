@@ -35,7 +35,7 @@ def get_penyakit_by_id(penyakit_id):
     if penyakit is None:
         return {"error": "Penyakit tidak ditemukan"}, 404
 
-    aturans = Aturan.query.filter_by(penyakit_id=penyakit_id).all()
+    aturans = Aturan.query.filter_by(penyakit_id=penyakit_id , is_active=True).all()
     result = []
     for aturan in aturans:
         result.append(
@@ -43,6 +43,7 @@ def get_penyakit_by_id(penyakit_id):
                 "id": aturan.id,
                 "kode": aturan.gejala.kode,
                 "nama": aturan.gejala.nama,
+                "gejala_id": aturan.gejala_id
             }
         )
 
@@ -73,8 +74,8 @@ def create_penyakit():
         db.session.commit()
     except IntegrityError as e:
         db.session.rollback()
-        error_msg, status_code = Helper.handle_integrity_error(e, Penyakit)
-        return jsonify({"error": error_msg}), status_code
+        error_msg, status_code = Helper.handle_integrity_error(e)
+        return jsonify(error_msg), status_code
     except Exception as e:
         db.session.rollback()
         return {"error": str(e)}, 500
