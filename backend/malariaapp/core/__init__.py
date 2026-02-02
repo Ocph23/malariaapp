@@ -38,6 +38,7 @@ def register_blueprints(app: Flask):
     from .blueprints import aturan_api
     from .blueprints import diagnosa_api
     from .blueprints import user_api
+    from .blueprints import pasien_api
 
     app.register_blueprint(auth_api, url_prefix="/api/auth")
     app.register_blueprint(gejala_api, url_prefix="/api/gejala")
@@ -45,6 +46,7 @@ def register_blueprints(app: Flask):
     app.register_blueprint(aturan_api, url_prefix="/api/aturan")
     app.register_blueprint(diagnosa_api, url_prefix="/api/diagnosa")
     app.register_blueprint(user_api, url_prefix="/api/user")
+    app.register_blueprint(pasien_api, url_prefix="/api/pasien")
 
 
 def auth_required(f):

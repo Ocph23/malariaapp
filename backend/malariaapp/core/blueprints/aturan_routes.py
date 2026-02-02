@@ -81,7 +81,14 @@ def create_aturan():
         db.session.rollback()
         return {"error": str(e)}, 500
 
-    return {"message": "Aturan berhasil ditambahkan"}, 201
+    return {
+        "id": aturan.id,
+        "penyakit_id":aturan.penyakit_id,
+        "gejala_id":aturan.gejala_id,
+        "kode":gejala.kode,
+        "nama":gejala.nama,
+        "is_active":aturan.is_active
+    }, 200
 
 
 @aturan_api.route("/<int:aturan_id>", methods=["PUT"])

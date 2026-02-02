@@ -5,6 +5,7 @@ from .inventory_api import (
     aturan_api,
     diagnosa_api,
     user_api,
+    pasien_api
 )
 
 
@@ -14,3 +15,4 @@ from . import penyakit_routes
 from . import aturan_routes
 from . import diagnosa_routes
 from . import user_routes
+from . import pasien_routes

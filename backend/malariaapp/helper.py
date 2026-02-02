@@ -12,11 +12,11 @@ class Helper:
         Decorator untuk menangani database errors secara otomatis
         """
         error_msg = str(error.orig) if hasattr(error, "orig") else str(error)
+        import re
 
         # PostgreSQL errors
         if "null value in column" in error_msg:
             # Extract column name from error message
-            import re
 
             match = re.search(r'column "(.+?)"', error_msg)
             column = match.group(1) if match else "unknown"

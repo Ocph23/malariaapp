@@ -35,7 +35,7 @@ def get_penyakit_by_id(penyakit_id):
     if penyakit is None:
         return {"error": "Penyakit tidak ditemukan"}, 404
 
-    aturans = Aturan.query.filter_by(penyakit_id=penyakit_id , is_active=True).all()
+    aturans = Aturan.query.filter_by(penyakit_id=penyakit_id, is_active=True).all()
     result = []
     for aturan in aturans:
         result.append(
@@ -43,7 +43,7 @@ def get_penyakit_by_id(penyakit_id):
                 "id": aturan.id,
                 "kode": aturan.gejala.kode,
                 "nama": aturan.gejala.nama,
-                "gejala_id": aturan.gejala_id
+                "gejala_id": aturan.gejala_id,
             }
         )
 
@@ -115,3 +115,16 @@ def delete_penyakit(penyakit_id):
     db.session.delete(penyakit)
     db.session.commit()
     return {"message": "Penyakit berhasil dihapus"}, 200
+
+
+###Fungsi Backward Chaining + Backtracking
+def backwardChaining(gejala):
+    from models import Penyakit, Aturan, DiagnosaGejala
+
+    penyakits = Penyakit.query.all()
+    for penyakit in penyakits:
+        aturan = Aturan.query.filter_by(penyakit_id=penyakit.id, is_active=True).all()
+        for aturanData in aturan:
+            gejalaData = DiagnosaGejala.query.filter_by(
+                diagnosa_id=gejala, gejala_id=aturanData.gejala_id
+            )

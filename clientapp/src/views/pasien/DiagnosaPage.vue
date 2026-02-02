@@ -38,6 +38,7 @@ import GejalaService from '@/services/GejalaService'
 import z from 'zod'
 import HelperService from '@/services/HelperService'
 import { useLoading } from '@/plugins/loading'
+import PasienService from '@/services/PasienService'
 
 const loadingService = useLoading()
 
@@ -88,9 +89,15 @@ const submit = async () => {
       }
     })
     if (isValid) {
-      setTimeout(() => {
-        loader.remove()
-      }, 5000)
+      PasienService.diagnosa(data.gejalas.filter((item) => item.jawaban === 'ya'))
+        .then((response) => {
+          console.log(response)
+          loader.remove()
+        })
+        .catch((error) => {
+          console.error('Diagnosa Error:', error)
+          loader.remove()
+        })
     } else loader.remove()
   } catch (error) {
     console.error('Validation Error:', error)
