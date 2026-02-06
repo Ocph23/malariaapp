@@ -54,11 +54,11 @@ export class ToastService {
 
   private getBackgroundColor(type: ToastType): string {
     const colors: Record<ToastType, string> = {
-      success: 'bg-green-50',
-      error: 'bg-red-50',
-      warning: 'bg-yellow-50',
-      info: 'bg-blue-50',
-      custom: 'bg-purple-50'
+      success: 'bg-green-500',
+      error: 'bg-red-500',
+      warning: 'bg-yellow-500',
+      info: 'bg-blue-500',
+      custom: 'bg-purple-500'
     };
     return colors[type];
   }
@@ -94,8 +94,8 @@ export class ToastService {
     const toastElement = document.createElement('div');
     toastElement.id = toastId;
     toastElement.className = `
-      max-w-sm w-full ${this.getBackgroundColor(config.type)} 
-      ${this.getBorderColor(config.type)} border rounded-xl shadow-lg 
+      max-w-sm w-full ${this.getBackgroundColor(config.type)}
+      ${this.getBorderColor(config.type)} border rounded-xl shadow-lg
       transform transition-all duration-300 ease-in-out
       animate-toast-in
     `;
@@ -109,10 +109,10 @@ export class ToastService {
           ${icon}
         </div>
         <div class="ml-3 flex-1">
-          <h3 class="font-semibold text-gray-800">${config.title}</h3>
-          <p class="mt-1 text-sm text-gray-600">${config.message}</p>
+          <h3 class="font-semibold text-white">${config.title}</h3>
+          <p class="mt-1 text-sm text-white">${config.message}</p>
         </div>
-        <button 
+        <button
           type="button"
           class="ml-4 -mt-1 -mr-2 p-2 text-gray-400 hover:text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
           aria-label="Close"

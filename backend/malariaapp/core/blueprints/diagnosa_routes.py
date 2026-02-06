@@ -2,6 +2,7 @@ from flask import request, g, jsonify
 from sqlalchemy.exc import IntegrityError
 from core import auth_required
 from helper import Helper
+import datetime
 
 from .inventory_api import diagnosa_api
 from models import Diagnosa, db, DiagnosaGejala
@@ -66,13 +67,17 @@ def get_diagnosa_by_id(diagnosa_id):
 def create_diagnosa():
     from models import Diagnosa
 
+    current_user = g.current_user
+
+    pasien = Pasien.query.filter_by(user_id=current_user["id"]).first()
+    if pasien is None:
+        return {"error": "Pasien tidak ditemukan"}, 404
+
     data = request.get_json()
 
-    print(data["gejala"])
-
     diagnosa = Diagnosa(
-        pasien_id=data["pasien_id"],
-        tanggal_diagnosa=data["tanggal_diagnosa"],
+        pasien_id=pasien.id,
+        tanggal_diagnosa=datetime.datetime.now(),
     )
 
     try:

@@ -1,14 +1,6 @@
 from core import database as db
 
 
-class Category(db.Model):
-    __tablename__ = "categories"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
-    slug = db.Column(db.String(200), unique=True, nullable=False)
-    is_active = db.Column(db.Boolean, default=True)
-
-
 class Gejala(db.Model):
     __tablename__ = "gejala"
     id = db.Column(db.Integer, primary_key=True)
@@ -53,8 +45,12 @@ class Diagnosa(db.Model):
     __tablename__ = "diagnosa"
     id = db.Column(db.Integer, primary_key=True)
     pasien_id = db.Column(db.Integer, db.ForeignKey("pasien.id"), nullable=False)
+    penyakit_id = db.Column(db.Integer, db.ForeignKey("penyakit.id"), nullable=False)
     tanggal_diagnosa = db.Column(db.Date, nullable=False)
     pasien = db.relationship("Pasien", backref=db.backref("diagnosa_list", lazy=True))
+    penyakit = db.relationship(
+        "Penyakit", backref=db.backref("diagnosa_list", lazy=True)
+    )
 
 
 class DiagnosaGejala(db.Model):

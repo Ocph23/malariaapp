@@ -54,8 +54,11 @@ export interface Pasien {
 export interface Diagnosa {
   id: number
   pasien_id: number
+  penyakit_id: number
   tanggal_diagnosa: Date
+  penyakit: Penyakit
   pasien: Pasien
+  diagnosa_gejala: DiagnosaGejala[]
 }
 
 export interface DiagnosaGejala {
@@ -69,4 +72,18 @@ export interface MessageError {
   error: string
   message: string
   detail: string
+}
+
+export interface DiagnosaResponse {
+  id: number
+  bobot: number
+  kode: string
+  nama: string
+  pengecekan: Pengecekan[]
+  status: boolean
+}
+
+export interface Pengecekan {
+  gejala: { id: number, gejala_id: number, kode: string, nama: string }
+  status: string
 }

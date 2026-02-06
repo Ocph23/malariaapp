@@ -25,3 +25,14 @@ export interface HeaderRequest {
     Authorization: string;
   };
 }
+
+
+export interface DiagnosaRequest {
+  id: number
+  penyakit_id: number
+  pasien_id: number
+  tanggal_diagnosa: Date
+  gejalas: number[]
+}
+
+

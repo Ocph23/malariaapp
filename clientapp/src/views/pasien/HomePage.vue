@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import PageTitle from '@/components/PageTitle.vue';
-import TheWelcome from '../../components/TheWelcome.vue'
-import PakarLayout from '@/components/layouts/PakarLayout.vue';
 import PasienLayout from '@/components/layouts/PasienLayout.vue';
 
 import('preline').then(() => {

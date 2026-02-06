@@ -1,5 +1,6 @@
 import type { User } from '@/models'
 import type { AuthResponse } from '@/models/response'
+import axios from 'axios'
 import { defineStore, acceptHMRUpdate } from 'pinia'
 
 
@@ -34,6 +35,7 @@ export const useAuthStore = defineStore('user', {
       localStorage.setItem('user', JSON.stringify(authResponse.user));
       this.token = authResponse.token;
       this.user = authResponse.user;
+      axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
       return Promise.resolve();
     },
 

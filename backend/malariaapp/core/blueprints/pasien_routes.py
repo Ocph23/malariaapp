@@ -1,10 +1,11 @@
+import datetime
 from flask import request, g, jsonify
 from sqlalchemy.exc import IntegrityError
 from core import auth_required
 from helper import Helper
 
 from .inventory_api import pasien_api
-from models import Pasien, db
+from models import DiagnosaGejala, Pasien, db
 
 
 @pasien_api.route("", methods=["GET"])
@@ -92,12 +93,46 @@ def delete_pasien(pasien_id):
         return {"error": str(e)}, 500
 
 
+@pasien_api.route("/savediagnosa", methods=["POST"])
+@auth_required
+def save_diagnosa():
+    from models import Diagnosa
+
+    data = request.get_json()
+    current_user = g.current_user
+
+    pasien = Pasien.query.filter_by(user_id=current_user["id"]).first()
+    if pasien is None:
+        return {"error": "Pasien tidak ditemukan"}, 404
+
+    diagnosa = Diagnosa(
+        pasien_id=pasien.id,
+        penyakit_id=data["penyakit_id"],
+        tanggal_diagnosa=datetime.datetime.now(),
+    )
+
+    try:
+        db.session.add(diagnosa)
+        db.session.flush()
+        for gejala in data["gejalas"]:
+            diagnosaGejala = DiagnosaGejala(diagnosa_id=diagnosa.id, gejala_id=gejala)
+            db.session.add(diagnosaGejala)
+        db.session.commit()
+    except IntegrityError as e:
+        db.session.rollback()
+        error_msg, status_code = Helper.handle_integrity_error(e, Diagnosa)
+        return jsonify({"error": error_msg}), status_code
+    except Exception as e:
+        db.session.rollback()
+        return {"error": str(e)}, 500
+    return {"message": "Diagnosa berhasil ditambah."}, 201
+
+
 @pasien_api.route("/diagnosa", methods=["POST"])
 @auth_required
 def create_diagnosa():
     from models import Pasien, Diagnosa, Penyakit, Aturan, DiagnosaGejala
 
-    print("Test")
     current_user = g.current_user
     data = request.get_json()
     pasien = Pasien.query.filter_by(user_id=current_user["id"]).first()
@@ -113,30 +148,38 @@ def create_diagnosa():
         aturans = Aturan.query.filter_by(penyakit_id=penyakit.id, is_active=True).all()
         data_penyakit.append(
             {
+                "id": penyakit.id,
                 "kode": penyakit.kode,
                 "nama": penyakit.nama,
                 "bobot": penyakit.bobot,
                 "solusi": penyakit.solusi,
-                "aturan": [aturan.gejala.kode for aturan in aturans],
+                "aturan": [
+                    {
+                        "id": aturan.id,
+                        "gejala_id": aturan.gejala_id,
+                        "kode": aturan.gejala.kode,
+                        "nama": aturan.gejala.nama,
+                    }
+                    for aturan in aturans
+                ],
             }
         )
 
     hasil = []
 
     for penyakit in data_penyakit:
-        terbukti = backward_chaining(penyakit, fakta_gejala)
-        if terbukti:
-            hasil.append(
-                {
-                    "kode": penyakit["kode"],
-                    "nama": penyakit["nama"],
-                    "bobot": penyakit["bobot"],
-                }
-            )
-
-    print(hasil)
-
-    return {"message": "Diagnosa berhasil dibuat"}, 201
+        pengecekan, status = backward_chaining(penyakit, fakta_gejala)
+        hasil.append(
+            {
+                "id": penyakit["id"],
+                "kode": penyakit["kode"],
+                "nama": penyakit["nama"],
+                "bobot": penyakit["bobot"],
+                "pengecekan": pengecekan,
+                "status": status,
+            }
+        )
+    return hasil, 201
 
 
 def backward_chaining(penyakit, fakta_gejala):
@@ -147,11 +190,15 @@ def backward_chaining(penyakit, fakta_gejala):
     print()
     print(f"\n🔍 Menguji penyakit: {penyakit}")
 
+    pengecekan = []
+
     for gejala in penyakit["aturan"]:
         print(f"   ➜ Cek gejala {gejala}")
-        if gejala not in fakta_gejala:
+        if gejala["kode"] not in fakta_gejala:
+            pengecekan.append({"gejala": gejala, "status": "BACKTRACK"})
             print("   ❌ Gejala tidak terpenuhi → BACKTRACK")
-            return False  # 🔥 Backtracking
+            return (pengecekan, False)  # 🔥 Backtracking
+        pengecekan.append({"gejala": gejala, "status": "TERPENUHI"})
         print("   ✅ Gejala terpenuhi")
     print("✅ Semua gejala terpenuhi")
-    return True
+    return (pengecekan, True)
