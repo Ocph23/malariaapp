@@ -4,3 +4,26 @@
 
 /* Plugins */
 @plugin "@tailwindcss/forms";
+
+@media print {
+  header,
+  footer,
+  .no-print,
+  #main {
+    display: none;
+  }
+}
+
+.no-print {
+  @apply block;
+  @media print {
+    @apply hidden;
+  }
+}
+
+.only-print {
+  @apply hidden;
+  @media print {
+    @apply block;
+  }
+}

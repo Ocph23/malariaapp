@@ -15,7 +15,7 @@ import('preline').then(() => {
     <div class="w-full text-center px-6">
 
       <!-- Title -->
-      <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight">
+      <h1 class="text-xl md:text-4xl font-extrabold text-gray-800 leading-tight">
         Deteksi Dini Penyakit Malaria
         <span class="block text-emerald-600 mt-2">
           Secara Cepat dan Akurat
@@ -23,7 +23,7 @@ import('preline').then(() => {
       </h1>
 
       <!-- Description -->
-      <p class="mt-6 text-lg text-gray-600 leading-relaxed">
+      <p class="mt-6 md:text-lg text-gray-600 leading-relaxed">
         Aplikasi ini membantu mendeteksi kemungkinan penyakit malaria
         berdasarkan gejala yang dialami pasien menggunakan
         <span class="font-semibold text-gray-700">metode sistem pakar</span>.

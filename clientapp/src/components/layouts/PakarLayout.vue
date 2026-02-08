@@ -13,7 +13,6 @@ const menus = ref([
   { name: 'Home', routeName: 'pakar.home', children: null, Icon: HomeIcon },
   { name: 'Gejala', routeName: 'pakar.gejala', children: null, Icon: ShieldExclamationIcon },
   { name: 'Penyakit', routeName: 'pakar.penyakit', children: null, Icon: BugAntIcon },
-  { name: 'Diagnosa', routeName: 'pakar.diagnosa', children: null, Icon: EyeDropperIcon },
 ]);
 
 

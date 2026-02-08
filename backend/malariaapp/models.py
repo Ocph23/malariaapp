@@ -46,7 +46,7 @@ class Diagnosa(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pasien_id = db.Column(db.Integer, db.ForeignKey("pasien.id"), nullable=False)
     penyakit_id = db.Column(db.Integer, db.ForeignKey("penyakit.id"), nullable=False)
-    tanggal_diagnosa = db.Column(db.Date, nullable=False)
+    tanggal_diagnosa = db.Column(db.DateTime, nullable=False)
     pasien = db.relationship("Pasien", backref=db.backref("diagnosa_list", lazy=True))
     penyakit = db.relationship(
         "Penyakit", backref=db.backref("diagnosa_list", lazy=True)

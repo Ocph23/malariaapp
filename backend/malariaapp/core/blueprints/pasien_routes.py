@@ -93,6 +93,57 @@ def delete_pasien(pasien_id):
         return {"error": str(e)}, 500
 
 
+@pasien_api.route("/riwayat", methods=["GET"])
+@auth_required
+def get_riwayat_diagnosa():
+    from models import Pasien, Diagnosa, Penyakit, Aturan, DiagnosaGejala
+
+    current_user = g.current_user
+    pasien = Pasien.query.filter_by(user_id=current_user["id"]).first()
+    if pasien is None:
+        return {"error": "Pasien tidak ditemukan"}, 404
+
+    try:
+        result = []
+        diagnosas = Diagnosa.query.filter_by(pasien_id=pasien.id).all()
+        for diagnosa in diagnosas:
+            gejala = DiagnosaGejala.query.filter_by(diagnosa_id=diagnosa.id).all()
+            dataDiagnosa = {
+                "id": diagnosa.id,
+                "pasien_id": diagnosa.pasien_id,
+                "tanggal_diagnosa": diagnosa.tanggal_diagnosa,
+                "pasien": {
+                    "id": diagnosa.pasien.id,
+                    "nama": diagnosa.pasien.nama,
+                    "alamat": diagnosa.pasien.alamat,
+                    "tanggal_lahir": diagnosa.pasien.tanggal_lahir,
+                    "jenis_kelamin": diagnosa.pasien.jenis_kelamin,
+                    "nomor_telepon": diagnosa.pasien.nomor_telepon,
+                },
+                "penyakit": {
+                    "id": diagnosa.penyakit.id,
+                    "kode": diagnosa.penyakit.kode,
+                    "nama": diagnosa.penyakit.nama,
+                    "bobot": diagnosa.penyakit.bobot,
+                    "solusi": diagnosa.penyakit.solusi,
+                },
+                "gejala": [],
+            }
+            for gejalaData in gejala:
+                dataDiagnosa["gejala"].append(
+                    {
+                        "id": gejalaData.gejala.id,
+                        "kode": gejalaData.gejala.kode,
+                        "nama": gejalaData.gejala.nama,
+                    }
+                )
+            result.append(dataDiagnosa)
+
+        return result, 201
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+
 @pasien_api.route("/savediagnosa", methods=["POST"])
 @auth_required
 def save_diagnosa():

@@ -30,6 +30,13 @@ def get_all_diagnosa():
                 "jenis_kelamin": diagnosa.pasien.jenis_kelamin,
                 "nomor_telepon": diagnosa.pasien.nomor_telepon,
             },
+            "penyakit": {
+                "id": diagnosa.penyakit.id,
+                "kode": diagnosa.penyakit.kode,
+                "nama": diagnosa.penyakit.nama,
+                "bobot": diagnosa.penyakit.bobot,
+                "solusi": diagnosa.penyakit.solusi,
+            },
             "gejala": [],
         }
         for gejalaData in gejala:
@@ -44,6 +51,59 @@ def get_all_diagnosa():
 
         result.append(dataDiagnosa)
     return {"diagnosas": result}, 200
+
+
+@diagnosa_api.route("/search", methods=["GET"])
+@auth_required
+def search_diagnosa():
+
+    current_user = g.current_user
+    print(f"User ID: {current_user}")
+    mulai = request.args.get("mulai")
+    hingga = request.args.get("hingga")
+    print(f"Diagnosa Param: {mulai} - {hingga}")
+    mulai = datetime.datetime.fromisoformat(mulai)
+    hingga = datetime.datetime.fromisoformat(hingga)
+    print(f"Diagnosa Param: {mulai} - {hingga}")
+    diagnosas = Diagnosa.query.filter(
+        Diagnosa.tanggal_diagnosa.between(mulai, hingga)
+    ).all()
+    result = []
+    for diagnosa in diagnosas:
+        gejala = DiagnosaGejala.query.filter_by(diagnosa_id=diagnosa.id).all()
+        dataDiagnosa = {
+            "id": diagnosa.id,
+            "pasien_id": diagnosa.pasien_id,
+            "tanggal_diagnosa": diagnosa.tanggal_diagnosa,
+            "pasien": {
+                "id": diagnosa.pasien.id,
+                "nama": diagnosa.pasien.nama,
+                "alamat": diagnosa.pasien.alamat,
+                "tanggal_lahir": diagnosa.pasien.tanggal_lahir,
+                "jenis_kelamin": diagnosa.pasien.jenis_kelamin,
+                "nomor_telepon": diagnosa.pasien.nomor_telepon,
+            },
+            "penyakit": {
+                "id": diagnosa.penyakit.id,
+                "kode": diagnosa.penyakit.kode,
+                "nama": diagnosa.penyakit.nama,
+                "bobot": diagnosa.penyakit.bobot,
+                "solusi": diagnosa.penyakit.solusi,
+            },
+            "gejala": [],
+        }
+        for gejalaData in gejala:
+            dataDiagnosa["gejala"].append(
+                {
+                    "id": gejalaData.gejala.id,
+                    "kode": gejalaData.gejala.kode,
+                    "nama": gejalaData.gejala.nama,
+                    "is_active": gejalaData.gejala.is_active,
+                }
+            )
+
+        result.append(dataDiagnosa)
+    return result, 200
 
 
 @diagnosa_api.route("<int:diagnosa_id>", methods=["GET"])

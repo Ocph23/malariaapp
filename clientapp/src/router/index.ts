@@ -32,7 +32,7 @@ const router = createRouter({
         {
           path: 'riwayat',
           name: 'pasien.riwayat',
-          component: () => import('../views/pasien/DiagnosaPage.vue'),
+          component: () => import('../views/pasien/RiwayatPage.vue'),
         },
       ],
     },

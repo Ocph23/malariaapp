@@ -87,3 +87,15 @@ export interface Pengecekan {
   gejala: { id: number, gejala_id: number, kode: string, nama: string }
   status: string
 }
+
+
+
+export interface RiwayatDiagnosa {
+  gejala: Gejala[]
+  id: number
+  pasien_id: number
+  penyakit: Penyakit
+  pasien: Pasien
+  tanggal_diagnosa: Date
+}
+
