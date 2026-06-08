@@ -1,6 +1,6 @@
 from flask import request, g, jsonify
 from sqlalchemy.exc import IntegrityError
-from core import auth_required
+from core import auth_required, role_required
 from helper import Helper
 
 from .inventory_api import penyakit_api
@@ -27,7 +27,8 @@ def get_all_penyakit():
     return result, 200
 
 
-@penyakit_api.route("<int:penyakit_id>", methods=["GET"])
+@penyakit_api.route("/<int:penyakit_id>", methods=["GET"])
+@auth_required
 def get_penyakit_by_id(penyakit_id):
     from models import Penyakit, Aturan
 
@@ -58,6 +59,8 @@ def get_penyakit_by_id(penyakit_id):
 
 
 @penyakit_api.route("/", methods=["POST"])
+@auth_required
+@role_required("admin", "pakar")
 def create_penyakit():
     from models import Penyakit
 
@@ -89,6 +92,8 @@ def create_penyakit():
 
 
 @penyakit_api.route("/<int:penyakit_id>", methods=["PUT"])
+@auth_required
+@role_required("admin", "pakar")
 def update_penyakit(penyakit_id):
     from models import Penyakit
 
@@ -106,6 +111,8 @@ def update_penyakit(penyakit_id):
 
 
 @penyakit_api.route("/<int:penyakit_id>", methods=["DELETE"])
+@auth_required
+@role_required("admin", "pakar")
 def delete_penyakit(penyakit_id):
     from models import Penyakit
 

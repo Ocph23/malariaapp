@@ -14,7 +14,7 @@
               <label>: {{ data.penyakit.nama }}</label>
             </div>
             <div class="w-full mt-2 border-b border-gray-200 dark:border-neutral-700 flex flex-row">
-              <label class="w-36">Kode </label>
+              <label class="w-36">Bobot </label>
               <label>: {{ data.penyakit.bobot }}</label>
             </div>
             <div class="w-full mt-2 border-b border-gray-200 dark:border-neutral-700 flex flex-row">
@@ -25,56 +25,38 @@
 
           <PageTitle title="Data Aturan/Gejala Penyakit" class="mt-10 ml-2"></PageTitle>
           <div class="flex justify-end pb-5">
-            <PlusSmallIcon
-              @click="addModal"
-              class="size-8 bg-teal-500 rounded-full p-1 text-white"
-            ></PlusSmallIcon>
+            <PlusSmallIcon @click="addModal" class="size-8 bg-teal-500 rounded-full p-1 text-white"></PlusSmallIcon>
           </div>
           <div class="overflow-hidden">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
               <thead>
                 <tr>
-                  <th
-                    scope="col"
-                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500"
-                  >
+                  <th scope="col"
+                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                     Kode
                   </th>
-                  <th
-                    scope="col"
-                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500"
-                  >
+                  <th scope="col"
+                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                     Nama Gejala
                   </th>
-                  <th
-                    scope="col"
-                    class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500"
-                  >
+                  <th scope="col"
+                    class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                     Action
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  v-for="item in data.penyakit.aturan"
-                  :key="item.id"
-                  class="odd:bg-white even:bg-gray-100 dark:odd:bg-neutral-900 dark:even:bg-neutral-800"
-                >
-                  <td
-                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200"
-                  >
+                <tr v-for="item in data.penyakit.aturan" :key="item.id"
+                  class="odd:bg-white even:bg-gray-100 dark:odd:bg-neutral-900 dark:even:bg-neutral-800">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">
                     {{ item.kode }}
                   </td>
-                  <td
-                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200"
-                  >
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
                     {{ item.nama }}
                   </td>
                   <td class="px-6 py-4 font-medium flex justify-end gap-2">
                     <button type="button" @click="confirmDelete(item.id)">
-                      <XCircleIcon
-                        class="size-5 hover:size-6 cursor-pointer text-red-600"
-                      ></XCircleIcon>
+                      <XCircleIcon class="size-5 hover:size-6 cursor-pointer text-red-600"></XCircleIcon>
                     </button>
                   </td>
                 </tr>
@@ -85,40 +67,21 @@
       </div>
     </div>
 
-    <div
-      id="aturanModal"
+    <div id="aturanModal"
       class="hs-overlay hidden size-full fixed top-0 start-0 z-80 overflow-x-hidden overflow-y-auto pointer-events-none"
-      role="dialog"
-      tabindex="-1"
-      aria-labelledby="aturanModal-label"
-    >
+      role="dialog" tabindex="-1" aria-labelledby="aturanModal-label">
       <div
-        class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto min-h-[calc(100%-56px)] flex items-center"
-      >
+        class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto min-h-[calc(100%-56px)] flex items-center">
         <div
-          class="bg-gray-100 w-full flex flex-col bg-overlay border border-overlay-line shadow-2xs rounded-xl pointer-events-auto"
-        >
+          class="bg-gray-100 w-full flex flex-col bg-overlay border border-overlay-line shadow-2xs rounded-xl pointer-events-auto">
           <div class="flex justify-between items-center py-3 px-4 border-b border-gray-300">
             <h3 id="aturanModal-label" class="font-semibold text-foreground">Tambah Penyakit</h3>
-            <button
-              type="button"
+            <button type="button"
               class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full bg-surface border border-surface-line text-surface-foreground hover:bg-surface-hover focus:outline-hidden focus:bg-surface-focus disabled:opacity-50 disabled:pointer-events-none"
-              aria-label="Close"
-              data-hs-overlay="#aturanModal"
-            >
+              aria-label="Close" data-hs-overlay="#aturanModal">
               <span class="sr-only">Close</span>
-              <svg
-                class="shrink-0 size-4"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
+              <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 6 6 18"></path>
                 <path d="m6 6 12 12"></path>
               </svg>
@@ -130,32 +93,21 @@
                 <div class="grid gap-y-4">
                   <!-- Form Group -->
                   <div>
-                    <ComboBox
-                      v-model="aturan.gejala_id"
-                      :options="modalSource"
-                      option-label="label"
-                      option-value="id"
-                      placeholder="Pilih Gejala"
-                      class="w-full"
-                    />
+                    <ComboBox v-model="aturan.gejala_id" :options="modalSource" option-label="label" option-value="id"
+                      placeholder="Pilih Gejala" class="w-full" />
                   </div>
                 </div>
               </div>
             </div>
             <div
-              class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200 dark:border-neutral-800"
-            >
-              <button
-                type="button"
+              class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200 dark:border-neutral-800">
+              <button type="button"
                 class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover focus:outline-hidden focus:bg-layer-focus disabled:opacity-50 disabled:pointer-events-none"
-                data-hs-overlay="#aturanModal"
-              >
+                data-hs-overlay="#aturanModal">
                 Close
               </button>
-              <button
-                type="submit"
-                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-              >
+              <button type="submit"
+                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none">
                 Save changes
               </button>
             </div>

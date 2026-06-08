@@ -8,7 +8,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     url_object = URL.create(
-        drivername="postgresql+psycopg2",
+        drivername="mysql+pymysql",
         username=os.getenv('DB_USER'),
         password=os.getenv('DB_PASSWORD'),
         host=os.getenv('DB_HOST'),

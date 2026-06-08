@@ -1,15 +1,23 @@
 import datetime
 from flask import request, g, jsonify
 from sqlalchemy.exc import IntegrityError
-from core import auth_required
+from core import auth_required, role_required
 from helper import Helper
 
 from .inventory_api import pasien_api
 from models import DiagnosaGejala, Pasien, db
 
 
+def pasien_profile_not_found_response():
+    return {
+        "error": "Profil pasien belum lengkap",
+        "message": "Akun pasien ini belum memiliki data pasien. Daftar melalui halaman register pasien atau lengkapi data pasien di database.",
+    }, 409
+
+
 @pasien_api.route("", methods=["GET"])
 @auth_required
+@role_required("admin")
 def get_all_pasien():
     current_user = g.current_user
     pasiens = Pasien.query.all()
@@ -30,8 +38,9 @@ def get_all_pasien():
     return result, 200
 
 
-@pasien_api.route("<int:pasien_id>", methods=["GET"])
+@pasien_api.route("/<int:pasien_id>", methods=["GET"])
 @auth_required
+@role_required("admin")
 def get_pasien_by_id(pasien_id):
     from models import Pasien
 
@@ -52,6 +61,7 @@ def get_pasien_by_id(pasien_id):
 
 @pasien_api.route("/<int:pasien_id>", methods=["PUT"])
 @auth_required
+@role_required("admin")
 def update_pasien(pasien_id):
     from models import Pasien
 
@@ -72,6 +82,7 @@ def update_pasien(pasien_id):
 
 @pasien_api.route("/<int:pasien_id>", methods=["DELETE"])
 @auth_required
+@role_required("admin")
 def delete_pasien(pasien_id):
     from models import Pasien
 
@@ -95,13 +106,14 @@ def delete_pasien(pasien_id):
 
 @pasien_api.route("/riwayat", methods=["GET"])
 @auth_required
+@role_required("pasien")
 def get_riwayat_diagnosa():
     from models import Pasien, Diagnosa, Penyakit, Aturan, DiagnosaGejala
 
     current_user = g.current_user
     pasien = Pasien.query.filter_by(user_id=current_user["id"]).first()
     if pasien is None:
-        return {"error": "Pasien tidak ditemukan"}, 404
+        return pasien_profile_not_found_response()
 
     try:
         result = []
@@ -146,6 +158,7 @@ def get_riwayat_diagnosa():
 
 @pasien_api.route("/savediagnosa", methods=["POST"])
 @auth_required
+@role_required("pasien")
 def save_diagnosa():
     from models import Diagnosa
 
@@ -154,7 +167,7 @@ def save_diagnosa():
 
     pasien = Pasien.query.filter_by(user_id=current_user["id"]).first()
     if pasien is None:
-        return {"error": "Pasien tidak ditemukan"}, 404
+        return pasien_profile_not_found_response()
 
     diagnosa = Diagnosa(
         pasien_id=pasien.id,
@@ -181,6 +194,7 @@ def save_diagnosa():
 
 @pasien_api.route("/diagnosa", methods=["POST"])
 @auth_required
+@role_required("pasien")
 def create_diagnosa():
     from models import Pasien, Diagnosa, Penyakit, Aturan, DiagnosaGejala
 
@@ -188,7 +202,7 @@ def create_diagnosa():
     data = request.get_json()
     pasien = Pasien.query.filter_by(user_id=current_user["id"]).first()
     if pasien is None:
-        return {"error": "Pasien tidak ditemukan"}, 404
+        return pasien_profile_not_found_response()
 
     fakta_gejala = [item["kode"] for item in data]
 

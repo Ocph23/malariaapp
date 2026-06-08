@@ -1,6 +1,4 @@
 from flask import Flask, jsonify, request, make_response
-import sqlite3
-import datetime
 
 from core import create_app
 from seeders import run_all

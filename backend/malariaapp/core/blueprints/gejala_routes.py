@@ -1,6 +1,6 @@
 from flask import request, g, jsonify
 from sqlalchemy.exc import IntegrityError
-from core import auth_required
+from core import auth_required, role_required
 from helper import Helper
 
 from .inventory_api import gejala_api
@@ -26,7 +26,7 @@ def get_all_gejala():
     return result, 200
 
 
-@gejala_api.route("<int:gejala_id>", methods=["GET"])
+@gejala_api.route("/<int:gejala_id>", methods=["GET"])
 @auth_required
 def get_gejala_by_id(gejala_id):
     from models import Gejala
@@ -44,6 +44,7 @@ def get_gejala_by_id(gejala_id):
 
 @gejala_api.route("/", methods=["POST"])
 @auth_required
+@role_required("admin", "pakar")
 def create_gejala():
     from models import Gejala
 
@@ -73,6 +74,7 @@ def create_gejala():
 
 @gejala_api.route("/<int:gejala_id>", methods=["PUT"])
 @auth_required
+@role_required("admin", "pakar")
 def update_gejala(gejala_id):
     from models import Gejala
 
@@ -90,6 +92,7 @@ def update_gejala(gejala_id):
 
 @gejala_api.route("/<int:gejala_id>", methods=["DELETE"])
 @auth_required
+@role_required("admin", "pakar")
 def delete_gejala(gejala_id):
     from models import Gejala
 

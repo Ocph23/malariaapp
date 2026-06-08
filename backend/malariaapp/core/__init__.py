@@ -56,7 +56,7 @@ def auth_required(f):
         # JWT is expected in the Authorization header: Bearer <token>
         if "Authorization" in request.headers:
             auth_header = request.headers["Authorization"]
-            if auth_header.startswith("Bearer "):
+            if auth_header.lower().startswith("bearer "):
                 token = auth_header.split(" ")[1]
 
         if not token:
@@ -79,3 +79,17 @@ def auth_required(f):
         return f(*args, **kwargs)
 
     return decorated
+
+
+def role_required(*roles):
+    def decorator(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            current_user = getattr(g, "current_user", None) or {}
+            if current_user.get("role") not in roles:
+                return jsonify({"message": "Forbidden"}), 403
+            return f(*args, **kwargs)
+
+        return decorated
+
+    return decorator

@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from sqlalchemy.exc import IntegrityError
-from core import auth_required
+from core import auth_required, role_required
 from helper import Helper
 
 from .inventory_api import aturan_api
@@ -9,6 +9,7 @@ from models import Aturan, Penyakit, Gejala, db
 
 @aturan_api.route("", methods=["GET"])
 @auth_required
+@role_required("admin", "pakar")
 def get_all_aturan():
     aturan_list = Aturan.query.filter_by(is_active=True).all()
     result = []
@@ -36,6 +37,7 @@ def get_all_aturan():
 
 @aturan_api.route("/<int:aturan_id>", methods=["GET"])
 @auth_required
+@role_required("admin", "pakar")
 def get_aturan_by_id(aturan_id):
     aturan = Aturan.query.get(aturan_id)
     if aturan is None:
@@ -51,6 +53,7 @@ def get_aturan_by_id(aturan_id):
 
 @aturan_api.route("/", methods=["POST"])
 @auth_required
+@role_required("admin", "pakar")
 def create_aturan():
     data = request.get_json()
 
@@ -93,6 +96,7 @@ def create_aturan():
 
 @aturan_api.route("/<int:aturan_id>", methods=["PUT"])
 @auth_required
+@role_required("admin", "pakar")
 def update_aturan(aturan_id):
     aturan = Aturan.query.get(aturan_id)
     if aturan is None:
@@ -110,6 +114,7 @@ def update_aturan(aturan_id):
 
 @aturan_api.route("/<int:aturan_id>", methods=["DELETE"])
 @auth_required
+@role_required("admin", "pakar")
 def delete_aturan(aturan_id):
     aturan = Aturan.query.get(aturan_id)
     if aturan is None:
@@ -123,6 +128,7 @@ def delete_aturan(aturan_id):
 
 @aturan_api.route("/penyakit/<int:penyakit_id>", methods=["GET"])
 @auth_required
+@role_required("admin", "pakar")
 def get_aturan_by_penyakit(penyakit_id):
     aturan_list = Aturan.query.filter_by(penyakit_id=penyakit_id, is_active=True).all()
 

@@ -23,6 +23,15 @@ def login():
     print(valid_password)
     if valid_password == False:
         return {"error": "Invalid password"}, 401
+
+    if user.role == "pasien":
+        pasien = Pasien.query.filter_by(user_id=user.id).first()
+        if pasien is None:
+            return {
+                "error": "Profil pasien belum lengkap",
+                "message": "Akun pasien ini belum memiliki data pasien. Daftar melalui halaman register pasien atau lengkapi data pasien di database.",
+            }, 409
+
     token = Helper.generate_token(user)
     return {
         "token": token,

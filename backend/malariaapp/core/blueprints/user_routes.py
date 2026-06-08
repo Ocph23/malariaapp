@@ -1,6 +1,6 @@
 from flask import request, g, jsonify
 from sqlalchemy.exc import IntegrityError
-from core import auth_required
+from core import auth_required, role_required
 from helper import Helper
 
 from .inventory_api import user_api
@@ -9,6 +9,7 @@ from models import User, db
 
 @user_api.route("", methods=["GET"])
 @auth_required
+@role_required("admin")
 def get_all_user():
     current_user = g.current_user
     users = User.query.all()
@@ -44,6 +45,7 @@ def get_all_user():
 
 @user_api.route("/", methods=["POST"])
 @auth_required
+@role_required("admin")
 def create_user():
     from models import User
 
@@ -79,6 +81,7 @@ def create_user():
 
 @user_api.route("/<int:user_id>", methods=["DELETE"])
 @auth_required
+@role_required("admin")
 def delete_user(user_id):
     from models import User
 
