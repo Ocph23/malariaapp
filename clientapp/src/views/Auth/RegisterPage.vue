@@ -144,6 +144,7 @@ const handleSubmit = async () => {
     register.username = register.nama;
     AuthService.register(register).then(() => {
       router.push({ name: 'pasien.home' });
+      loader.remove();
     }).catch(() => {
       loader.remove();
     });

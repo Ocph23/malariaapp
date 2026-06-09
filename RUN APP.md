@@ -1,4 +1,8 @@
+# pastikan msql sudah run (xampp)
+
+
 # run Environment Backend
+
 
 ```powershell
 cd backend
