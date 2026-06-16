@@ -120,10 +120,11 @@ def delete_aturan(aturan_id):
     if aturan is None:
         return {"error": "Aturan tidak ditemukan"}, 404
 
-    aturan.is_active = False
+    # aturan.is_active = False
+    db.session.delete(aturan)
     db.session.commit()
 
-    return {"message": "Aturan berhasil dinonaktifkan"}, 200
+    return {"message": "Aturan berhasil dihapus"}, 200
 
 
 @aturan_api.route("/penyakit/<int:penyakit_id>", methods=["GET"])
