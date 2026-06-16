@@ -21,6 +21,12 @@
                   <th scope="col"
                     class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Role
                   </th>
+                  <th scope="col"
+                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                    Status</th>
+                  <th scope="col"
+                    class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Action
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -32,6 +38,17 @@
                     {{ item.email }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
                     {{ item.role }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                    {{ item.is_active }}</td>
+
+                  <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium" v-if="item.role != 'admin'">
+                    <button v-if="item.is_active" type="button" @click="confirmDelete(item.id)">
+                      <XCircleIcon class="size-5 hover:size-7 cursor-pointer text-red-600"></XCircleIcon>
+                    </button>
+                    <button v-if="item.is_active === false" type="button" @click="confirmDelete(item.id)">
+                      <CheckCircleIcon class="size-5 hover:size-7 cursor-pointer text-green-600"></CheckCircleIcon>
+                    </button>
+                  </td>
                 </tr>
 
 
@@ -140,7 +157,7 @@ import { useLoading } from '@/plugins/loading';
 import UserService from '@/services/UserService';
 import { reactive, ref } from 'vue';
 import type { User } from '@/models';
-import { PlusSmallIcon, XCircleIcon } from '@heroicons/vue/24/outline';
+import { CheckCircleIcon, PlusSmallIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 const loadingService = useLoading();
 const toast = useToast();
 
@@ -229,9 +246,15 @@ const deletex = async () => {
 
     const loader = loadingService.spinner('Delete data...', { fullscreen: true });
     UserService.delete(deleteId.value).then(() => {
-      data.users = data.users.filter(item => item.id !== deleteId.value);
+      const user = data.users.find(item => item.id === deleteId.value);
+      user?.is_active ? user.is_active = false : user!.is_active = true;
       loader.remove();
-      toast.success('Data deleted successfully!');
+
+      if (user?.is_active) {
+        toast.success('Data activated successfully!');
+      } else {
+        toast.success('Data deactivated successfully!');
+      }
     }).catch(error => {
       console.log(error);
       loader.remove();
