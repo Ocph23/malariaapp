@@ -253,7 +253,7 @@ const deletex = async () => {
       if (user?.is_active) {
         toast.success('Data activated successfully!');
       } else {
-        toast.success('Data deactivated successfully!');
+        toast.error('Data deactivated successfully!');
       }
     }).catch(error => {
       console.log(error);
