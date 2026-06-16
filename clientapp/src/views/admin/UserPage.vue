@@ -21,12 +21,6 @@
                   <th scope="col"
                     class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Role
                   </th>
-                  <th scope="col"
-                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                    Status</th>
-                  <th scope="col"
-                    class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Action
-                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -38,18 +32,6 @@
                     {{ item.email }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
                     {{ item.role }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
-                    {{ item.is_active }}</td>
-
-                  <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                    <!-- <button type="button" @click="edit(item)">
-                      <PencilSquareIcon class="size-5 hover:size-6 cursor-pointer text-amber-600"></PencilSquareIcon>
-                    </button> -->
-                    <button type="button" @click="confirmDelete(item.id)">
-                      <XCircleIcon class="size-5 hover:size-6 cursor-pointer text-red-600"></XCircleIcon>
-                    </button>
-
-                  </td>
                 </tr>
 
 

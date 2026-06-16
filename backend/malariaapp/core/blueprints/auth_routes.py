@@ -19,6 +19,10 @@ def login():
     ).first()
     if user is None:
         return {"error": "User not found"}, 404
+    
+    # if user.is_active and user. == False:
+    #     return {"error": "User tidak aktif"}, 403
+
     valid_password = Helper.verify_password(user.password, data["password"])
     print(valid_password)
     if valid_password == False:

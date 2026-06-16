@@ -88,6 +88,7 @@ def delete_user(user_id):
     user = User.query.get(user_id)
     if user is None:
         return {"error": "User tidak ditemukan"}, 404
-    db.session.delete(user)
+    
+    user.is_active = False
     db.session.commit()
-    return {"message": "User berhasil dihapus"}, 200
+    return {"message": "User berhasil dinonaktifkan"}, 200
