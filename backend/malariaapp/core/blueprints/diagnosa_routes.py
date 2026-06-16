@@ -149,11 +149,28 @@ def update_diagnosa(diagnosa_id):
 
 @diagnosa_api.route("/<int:diagnosa_id>", methods=["DELETE"])
 @auth_required
-@role_required("admin")
+@role_required("admin", "pasien")
 def delete_diagnosa(diagnosa_id):
     diagnosa = Diagnosa.query.get(diagnosa_id)
     if diagnosa is None:
         return {"error": "Diagnosa tidak ditemukan"}, 404
-    db.session.delete(diagnosa)
-    db.session.commit()
-    return {"message": "Diagnosa berhasil dihapus"}, 200
+
+    current_user = g.current_user
+    pasien_milik_user = diagnosa.pasien.user_id == current_user["id"]
+    if current_user["role"] == "pasien" and not pasien_milik_user:
+        return {"message": "Forbidden"}, 403
+
+    try:
+        DiagnosaGejala.query.filter_by(diagnosa_id=diagnosa_id).delete(
+            synchronize_session=False
+        )
+        db.session.delete(diagnosa)
+        db.session.commit()
+        return {"message": "Diagnosa berhasil dihapus"}, 200
+    except IntegrityError as e:
+        db.session.rollback()
+        error_msg, status_code = Helper.handle_integrity_error(e, Diagnosa)
+        return jsonify({"error": error_msg}), status_code
+    except Exception as e:
+        db.session.rollback()
+        return {"error": str(e)}, 500

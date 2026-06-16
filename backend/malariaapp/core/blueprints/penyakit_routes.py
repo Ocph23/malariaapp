@@ -114,14 +114,40 @@ def update_penyakit(penyakit_id):
 @auth_required
 @role_required("admin", "pakar")
 def delete_penyakit(penyakit_id):
-    from models import Penyakit
+    from models import Aturan, Diagnosa, Penyakit
 
     penyakit = Penyakit.query.get(penyakit_id)
     if penyakit is None:
         return {"error": "Penyakit tidak ditemukan"}, 404
-    db.session.delete(penyakit)
-    db.session.commit()
-    return {"message": "Penyakit berhasil dihapus"}, 200
+
+    aturan_count = Aturan.query.filter_by(penyakit_id=penyakit_id).count()
+    diagnosa_count = Diagnosa.query.filter_by(penyakit_id=penyakit_id).count()
+
+    if aturan_count > 0 or diagnosa_count > 0:
+        messages = []
+        if aturan_count > 0:
+            messages.append("masih memiliki relasi aturan")
+        if diagnosa_count > 0:
+            messages.append("masih digunakan pada riwayat diagnosa")
+        return {
+            "error": (
+                "Penyakit tidak dapat dihapus karena "
+                + " dan ".join(messages)
+                + ". Hapus data terkait terlebih dahulu."
+            )
+        }, 409
+
+    try:
+        db.session.delete(penyakit)
+        db.session.commit()
+        return {"message": "Penyakit berhasil dihapus"}, 200
+    except IntegrityError as e:
+        db.session.rollback()
+        error_msg, status_code = Helper.handle_integrity_error(e, Penyakit)
+        return jsonify({"error": error_msg}), status_code
+    except Exception as e:
+        db.session.rollback()
+        return {"error": str(e)}, 500
 
 
 ###Fungsi Backward Chaining + Backtracking

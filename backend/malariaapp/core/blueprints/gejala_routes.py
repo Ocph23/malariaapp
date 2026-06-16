@@ -94,13 +94,17 @@ def update_gejala(gejala_id):
 @auth_required
 @role_required("admin", "pakar")
 def delete_gejala(gejala_id):
-    from models import Gejala
+    from models import Aturan, DiagnosaGejala, Gejala
 
     gejala = Gejala.query.get(gejala_id)
     if gejala is None:
         return {"error": "Gejala tidak ditemukan"}, 404
 
     try:
+        Aturan.query.filter_by(gejala_id=gejala_id).delete(synchronize_session=False)
+        DiagnosaGejala.query.filter_by(gejala_id=gejala_id).delete(
+            synchronize_session=False
+        )
         db.session.delete(gejala)
         db.session.commit()
         return {"message": "Gejala berhasil dihapus"}, 200

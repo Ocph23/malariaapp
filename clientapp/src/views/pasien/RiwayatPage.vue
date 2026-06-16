@@ -66,7 +66,6 @@
 <script setup lang="ts">
 import { useToast } from '@/plugins/toast'
 import { useLoading } from '@/plugins/loading'
-import GejalaService from '@/services/GejalaService'
 import { reactive, ref } from 'vue'
 import type { RiwayatDiagnosa } from '@/models'
 import { PrinterIcon, XCircleIcon } from '@heroicons/vue/24/outline'
@@ -78,6 +77,7 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import PasienLayout from '@/components/layouts/PasienLayout.vue'
 import PasienService from '@/services/PasienService'
+import DiagnosaService from '@/services/DiagnosaService'
 import PrintDiagnosaPage from './PrintDiagnosaPage.vue'
 
 const data = reactive({ diagnosas: [] as RiwayatDiagnosa[] })
@@ -110,9 +110,9 @@ const confirmDelete = (id: number) => {
 const deletex = async () => {
   try {
     const loader = loadingService.spinner('Delete data...', { fullscreen: true })
-    GejalaService.delete(deleteId.value)
+    DiagnosaService.delete(deleteId.value)
       .then(() => {
-        data.gejalas = data.gejalas.filter((item) => item.id !== deleteId.value)
+        data.diagnosas = data.diagnosas.filter((item) => item.id !== deleteId.value)
         loader.remove()
         toast.success('Data deleted successfully!')
       })
